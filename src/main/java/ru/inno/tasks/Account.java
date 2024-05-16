@@ -1,17 +1,23 @@
 package ru.inno.tasks;
 
-import java.util.*;
-
 import lombok.Getter;
-import lombok.Setter;
+
+import java.util.*;
 
 @Getter
 public class Account {
-    @Setter
-    String name;
+    private String name;
     Map<Currency, Integer> values = new HashMap<>();
 
     public Account(String name) {
+        if (name.isBlank())
+            throw new IllegalArgumentException("The name cannot be empty");
+        this.name = name;
+    }
+
+    public void setName(String name) {
+        if (name.isBlank())
+            throw new IllegalArgumentException("The name cannot be empty");
         this.name = name;
     }
 
