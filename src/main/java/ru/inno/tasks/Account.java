@@ -10,6 +10,35 @@ public class Account {
     private Map<Currency, Integer> values = new HashMap<>();
     Deque<Action> deque = new ArrayDeque<>();
 
+
+    private class Save {
+        @Getter String name;
+        @Getter private Map<Currency, Integer> values;
+
+        public Save(String name, Map<Currency, Integer> values) {
+            this.name = name;
+            this.values = values;
+        }
+
+        @Override
+        public String toString() {
+            return "Save{" +
+                    "name='" + name + '\'' +
+                    ", values=" + values +
+                    '}';
+        }
+    }
+
+    public Save Save() {
+        return new Save(name, values);
+    }
+
+    public void load(Save save) {
+        name = save.name;
+        values = save.values;
+    }
+
+
     public Account(String name) {
         if (name.isBlank())
             throw new IllegalArgumentException("The name cannot be empty");
@@ -19,33 +48,10 @@ public class Account {
     public void setName(String name) {
         if (name.isBlank())
             throw new IllegalArgumentException("The name cannot be empty");
-        deque.push(new SetData(this.name));
+        String tmp = this.name;
+        deque.push(() -> Account.this.name = tmp);
         this.name = name;
-    }
 
-    private class SetData implements Action {
-        String name_tmp;
-        Currency cur_tmp;
-        int val_tmp;
-
-        public SetData(String name_tmp) {
-            this.name_tmp = name_tmp;
-        }
-
-        public SetData(Currency cur_tmp, int val_tmp) {
-            this.cur_tmp = cur_tmp;
-            this.val_tmp = val_tmp;
-        }
-
-        @Override
-        public void make() {
-            if (name_tmp != null) {
-                name = name_tmp;
-            }
-            if (cur_tmp != null) {
-                values.put(cur_tmp, val_tmp);
-            }
-        }
     }
 
     public Map<Currency, Integer> getValues() {
@@ -61,13 +67,14 @@ public class Account {
         } else {
             tmp = 0;
         }
-        deque.push(new SetData(cur, tmp));
+        deque.push(() -> Account.this.values.put(cur, tmp));
         values.put(cur, val);
-
     }
+
     public void undo() {
-        deque.pop().make();
+        if (!deque.isEmpty()) {
+            deque.pop().make();
+        }
     }
-
 
 }
