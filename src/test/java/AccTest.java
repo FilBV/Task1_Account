@@ -1,31 +1,35 @@
-package ru.inno.tasks;
-
 import lombok.Getter;
+import ru.inno.tasks.Action;
+import ru.inno.tasks.Currency;
+import ru.inno.tasks.Save;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
 
-public class Account {
+public class AccTest {
     @Getter
     private String name;
-    private Map<Currency, Integer> values = new HashMap<>();
+    private Map<ru.inno.tasks.Currency, Integer> values = new HashMap<>();
     Deque<Action> deque = new ArrayDeque<>();
 
     private class SaveImpl implements Save {
 
-        private String name = Account.this.name;
-        private Map<Currency, Integer> values = new HashMap<>(Account.this.values);
+        private String name = AccTest.this.name;
+        private Map<ru.inno.tasks.Currency, Integer> values = new HashMap<>(AccTest.this.values);
 
         public void load() {
-            Account.this.name = name;
-            Account.this.values = new HashMap<>(values);
+            AccTest.this.name = name;
+            AccTest.this.values = new HashMap<>(values);
         }
-    }
 
+    }
     public SaveImpl save() {
         return new SaveImpl();
     }
 
-    public Account(String name) {
+    public AccTest(String name) {
         if (name.isBlank())
             throw new IllegalArgumentException("The name cannot be empty");
         this.name = name;
@@ -35,11 +39,12 @@ public class Account {
         if (name.isBlank())
             throw new IllegalArgumentException("The name cannot be empty");
         String tmp = this.name;
-        deque.push(() -> Account.this.name = tmp);
+        deque.push(() -> AccTest.this.name = tmp);
         this.name = name;
+
     }
 
-    public Map<Currency, Integer> getValues() {
+    public Map<ru.inno.tasks.Currency, Integer> getValues() {
         return new HashMap<>(values);
     }
 
@@ -52,7 +57,7 @@ public class Account {
         } else {
             tmp = 0;
         }
-        deque.push(() -> Account.this.values.put(cur, tmp));
+        deque.push(() -> AccTest.this.values.put(cur, tmp));
         values.put(cur, val);
     }
 
