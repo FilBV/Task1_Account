@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AccTest {
+    public int count_undo;
+    public int count_save;
     @Getter
     private String name;
     private Map<ru.inno.tasks.Currency, Integer> values = new HashMap<>();
@@ -23,9 +25,10 @@ public class AccTest {
             AccTest.this.name = name;
             AccTest.this.values = new HashMap<>(values);
         }
-
     }
+
     public SaveImpl save() {
+        count_save++;
         return new SaveImpl();
     }
 
@@ -62,6 +65,7 @@ public class AccTest {
     }
 
     public void undo() {
+        count_undo++;
         if (!deque.isEmpty()) {
             deque.pop().make();
         }

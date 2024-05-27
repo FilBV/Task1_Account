@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.inno.tasks.*;
 
@@ -5,6 +6,7 @@ import ru.inno.tasks.*;
 public class Tests {
     @Test
     public void SecondTest() {
+
 
         AccTest acc = new AccTest("Устинов Сергей Иванович");
         acc.setName("Иванов Петр Сергеевич");
@@ -21,7 +23,10 @@ public class Tests {
         acc.addCur(Currency.USD, 35);
         acc.undo();
         acc.undo();
-        acc.undo();
+        Assertions.assertEquals(acc.count_undo, 3);
+        Assertions.assertEquals(acc.count_save, 2);
+        ;
+
     }
 
 }
