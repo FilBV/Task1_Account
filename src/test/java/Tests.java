@@ -1,13 +1,12 @@
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.inno.tasks.*;
 
-
 public class Tests {
     @Test
-    public void SecondTest() {
-
-
+    @DisplayName("Test undo & save")
+    public void Test() {
         AccTest acc = new AccTest("Устинов Сергей Иванович");
         acc.setName("Иванов Петр Сергеевич");
         acc.addCur(Currency.RUB, 59);
@@ -25,8 +24,6 @@ public class Tests {
         acc.undo();
         Assertions.assertEquals(acc.count_undo, 3);
         Assertions.assertEquals(acc.count_save, 2);
-        ;
 
     }
-
 }
